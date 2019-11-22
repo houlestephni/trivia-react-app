@@ -43,10 +43,15 @@ class App extends Component {
       gamesPlayed: 0,
       questionsArray: []
     };
+    this.addQuestionsToArray = this.addQuestionsToArray.bind(this);
   }
 
   addQuestionsToArray(response) {
-    response.array.forEach(element => {});
+    // response.array.forEach(element => {});
+    this.setState({
+      questionsArray: response
+    });
+    console.log(response);
   }
 
   // render
@@ -88,7 +93,10 @@ class App extends Component {
               this.state.startGame === 1 && (
                 <div>
                   "Quiz Setup"
-                  <QuizSetup />
+                  <QuizSetup
+                    questionsArray={this.state.questionsArray}
+                    addQuestionsToArray={this.addQuestionsToArray}
+                  />
                 </div>
               )}
             {/*  */}

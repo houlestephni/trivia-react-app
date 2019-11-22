@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import axios from "axios";
 import { DropdownButton } from "react-bootstrap";
 import { Dropdown } from "react-bootstrap";
 
@@ -6,114 +7,125 @@ class QuizSetup extends Component {
   constructor() {
     super();
     this.state = {
-      numberQuestions: "10",
-      difficultyQuestions: "easy",
-      typeQuestions: "multiple",
+      numberOfQuestions: "10",
+      difficultyOfQuestions: "easy",
+      typeOfQuestions: "multiple",
       questionsArray: []
     };
     this.handleClick = this.handleClick.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.callTriviaAPI = this.callTriviaAPI.bind(this);
   }
 
   handleClick(event) {
     event.preventDefault();
     this.setState({ [event.currentTarget.name]: event.currentTarget.value });
 
-    console.log(event.currentTarget.name);
+    console.log(event.currentTarget.name, ":", event.currentTarget.value);
   }
-  async handleSubmit(event) {
-    event.preventDefault();
+
+  async callTriviaAPI() {
+    try {
+      const number = this.state.numberOfQuestions;
+      const level = this.state.difficultyOfQuestions;
+      const type = this.state.typeOfQuestions;
+
+      const response = await axios.get(
+        `https://opentdb.com/api.php?amount=${number}&category=9&difficulty=${level}&type=${type}`
+      );
+      console.log("api request:", response.data.results);
+      const quizSet = response.data.results;
+      this.setState({
+        questionsArray: quizSet
+      });
+      this.props.addQuestionsToArray(response.data.results);
+    } catch (error) {
+      console.log("api fail", error);
+    }
   }
 
   render() {
     return (
       <div>
-        <h1>Create your quiz!</h1>
-        <form onSubmit={this.handleSumbit}>
-          <DropdownButton
-            id="dropdown-item-button"
-            title="Number of Questions"
-            default="10"
+        <h1>Create Your Quiz!</h1>
+        <DropdownButton id="dropdown-item-button" title="Number of Questions">
+          <Dropdown.Item
+            onClick={this.handleClick}
+            as="button"
+            name="numberOfQuestions"
+            value="5"
           >
-            <Dropdown.Item
-              onClick={this.handleClick}
-              as="button"
-              name="5"
-              value={this.state.numberQuestions}
-            >
-              5
-            </Dropdown.Item>
-            <Dropdown.Item
-              as="button"
-              name="10"
-              onClick={this.handleClick}
-              value={this.state.numberQuestions}
-            >
-              10
-            </Dropdown.Item>
-            <Dropdown.Item
-              as="button"
-              name="15"
-              onClick={this.handleClick}
-              value={this.state.numberQuestions}
-            >
-              15
-            </Dropdown.Item>
-            <Dropdown.Item
-              as="button"
-              name="20"
-              onClick={this.handleClick}
-              value={this.state.numberQuestions}
-            >
-              20
-            </Dropdown.Item>
-          </DropdownButton>
-          <DropdownButton id="dropdown-item-button" title="Difficulty">
-            <Dropdown.Item
-              as="button"
-              name="easy"
-              onClick={this.handleClick}
-              value={this.state.difficultyQuestions}
-            >
-              Easy
-            </Dropdown.Item>
-            <Dropdown.Item
-              as="button"
-              name="medium"
-              onClick={this.handleClick}
-              value={this.state.difficultyQuestions}
-            >
-              Medium
-            </Dropdown.Item>
-            <Dropdown.Item
-              as="button"
-              name="hard"
-              onClick={this.handleClick}
-              value={this.state.difficultyQuestions}
-            >
-              Hard
-            </Dropdown.Item>
-          </DropdownButton>
-          <DropdownButton id="dropdown-item-button" title="Answer Type">
-            <Dropdown.Item
-              as="button"
-              name="multiple"
-              onClick={this.handleClick}
-              value={this.state.typeQuestions}
-            >
-              Multiple Choice
-            </Dropdown.Item>
-            <Dropdown.Item
-              as="button"
-              name="boolean"
-              onClick={this.handleClick}
-              value={this.state.typeQuestions}
-            >
-              True/False
-            </Dropdown.Item>
-          </DropdownButton>
-          <input type="submit" value="GO" />
-        </form>
+            5
+          </Dropdown.Item>
+          <Dropdown.Item
+            as="button"
+            name="numberOfQuestions"
+            onClick={this.handleClick}
+            value="10"
+          >
+            10
+          </Dropdown.Item>
+          <Dropdown.Item
+            as="button"
+            name="numberOfQuestions"
+            onClick={this.handleClick}
+            value="15"
+          >
+            15
+          </Dropdown.Item>
+          <Dropdown.Item
+            as="button"
+            name="numberOfQuestions"
+            onClick={this.handleClick}
+            value="20"
+          >
+            20
+          </Dropdown.Item>
+        </DropdownButton>
+        <DropdownButton id="dropdown-item-button" title="Difficulty">
+          <Dropdown.Item
+            as="button"
+            name="difficultyOfQuestions"
+            onClick={this.handleClick}
+            value="easy"
+          >
+            Easy
+          </Dropdown.Item>
+          <Dropdown.Item
+            as="button"
+            name="difficultyOfQuestions"
+            onClick={this.handleClick}
+            value="medium"
+          >
+            Medium
+          </Dropdown.Item>
+          <Dropdown.Item
+            as="button"
+            name="difficultyOfQuestions"
+            onClick={this.handleClick}
+            value="hard"
+          >
+            Hard
+          </Dropdown.Item>
+        </DropdownButton>
+        <DropdownButton id="dropdown-item-button" title="Answer Type">
+          <Dropdown.Item
+            as="button"
+            name="typeOfQuestions"
+            onClick={this.handleClick}
+            value="multiple"
+          >
+            Multiple Choice
+          </Dropdown.Item>
+          <Dropdown.Item
+            as="button"
+            name="typeOfQuestions"
+            onClick={this.handleClick}
+            value="boolean"
+          >
+            True/False
+          </Dropdown.Item>
+        </DropdownButton>
+        <button onClick={this.callTriviaAPI}>GO</button>
       </div>
     );
   }
