@@ -2,7 +2,7 @@
 // Changed above line to below to access 'Component'
 import React, { Component } from "react";
 import { Container, Row, Col } from "reactstrap";
-
+import QuizSetup from "./components/QuizSetup_sah";
 // dependencies
 import axios from "axios";
 
@@ -79,14 +79,18 @@ class App extends Component {
         <Row>
           {/* Quiz */}
           <Col lg={8} md={8} sm={8} xs={12}>
-            Quiz components here
             {this.state.quizInPlay === 0 &&
               this.state.isSetupDone === 0 &&
               this.state.startGame === 0 && <div> "QuizStart" </div>}
             {/*  */}
             {this.state.quizInPlay === 0 &&
               this.state.isSetupDone === 0 &&
-              this.state.startGame === 1 && <div>"Quiz Setup"</div>}
+              this.state.startGame === 1 && (
+                <div>
+                  "Quiz Setup"
+                  <QuizSetup />
+                </div>
+              )}
             {/*  */}
             {this.state.isSetupDone === 1 &&
               this.state.quizInPlay === 1 &&
