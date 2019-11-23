@@ -18,6 +18,7 @@ import "./custom.scss";
 import "./css/custom.css";
 import logo from "./logo.svg";
 import "./App.css";
+import { tsExpressionWithTypeArguments } from "@babel/types";
 
 // set baseURL
 let baseURL = process.env.REACT_APP_BASEURL;
@@ -120,7 +121,7 @@ class App extends Component {
                     gamesPlayed={gamesPlayed}
                     updateGamesPlayedCounter={updateGamesPlayedCounter}
                   /> */}
-                <QuizQA />
+                <QuizQA questionsArray={this.state.questionsArray} />
               </div>
             )}
             {/*  */}
