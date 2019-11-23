@@ -20,85 +20,38 @@ class QuizQA extends Component {
       randomAnswers: [],
       selectedAnswer: "",
       qaIndex: 0,
-      numQuestions: 5,
-      qadata: [
-        {
-          category: "General Knowledge",
-          type: "multiple",
-          difficulty: "medium",
-          question:
-            "Rolex is a company that specializes in what type of product?",
-          correct_answer: "Watches",
-          incorrect_answers: ["Cars", "Computers", "Sports equipment"]
-        },
-        {
-          category: "General Knowledge",
-          type: "multiple",
-          difficulty: "medium",
-          question:
-            "Which of the following Ivy League universities has its official motto in Hebrew as well as in Latin?",
-          correct_answer: "Yale University",
-          incorrect_answers: [
-            "Princeton University",
-            "Harvard University",
-            "Columbia University",
-            "Rutgers University",
-            "Wisconsin University"
-          ]
-        },
-        {
-          category: "General Knowledge",
-          type: "multiple",
-          difficulty: "medium",
-          question: "In 2013 how much money was lost by Nigerian scams?",
-          correct_answer: "$12.7 Billion",
-          incorrect_answers: ["$95 Million", "$956 Million", "$2.7 Billion"]
-        },
-        {
-          category: "General Knowledge",
-          type: "multiple",
-          difficulty: "medium",
-          question:
-            "Which of these companies does NOT manufacture automobiles?",
-          correct_answer: "Ducati",
-          incorrect_answers: ["Nissan", "GMC", "Fiat"]
-        },
-        {
-          category: "General Knowledge",
-          type: "multiple",
-          difficulty: "medium",
-          question: "A factiod is what?",
-          correct_answer: "A falsehood",
-          incorrect_answers: [
-            "Useless trivia",
-            "A tiny fact",
-            "A scientific figure"
-          ]
-        },
-        {
-          category: "General Knowledge",
-          type: "multiple",
-          difficulty: "medium",
-          question:
-            "Which of these is the name of a Japanese system of alternative medicine, literally meaning &quot;finger pressure&quot;?",
-          correct_answer: "Shiatsu",
-          incorrect_answers: ["Ukiyo", "Majime", "Ikigai"]
-        }
-      ]
+      numQuestions: 0,
+      qadata: [],
+      isFetching: true
     };
-    this.dummfunc = this.dummfunc.bind(this);
+    this.setupQuiz = this.setupQuiz.bind(this);
     this.randomizeAnswers = this.randomizeAnswers.bind(this);
     this.handleChangeAnswerChosen = this.handleChangeAnswerChosen.bind(this);
     this._handleNextQuestion = this._handleNextQuestion.bind(this);
     this._handleChangeNextItem = this._handleChangeNextItem.bind(this);
+    this._handleupdateDB = this._handleupdateDB.bind(this);
   }
 
-  dummfunc() {
-    this.randomizeAnswers();
+  setupQuiz() {
+    this.setState(
+      {
+        numQuestions: this.props.questionsArray.length,
+        qadata: this.props.questionsArray,
+        qaIndex: 0
+      },
+      () => {
+        this.randomizeAnswers();
+      }
+    );
   }
 
   randomizeAnswers() {
-    console.log(" in randomize answers ", this.state.qaIndex);
+    console.log(
+      " in randomize answers ",
+      this.state.qaIndex,
+      this.state.qadata,
+      this.state.qadata[0].question
+    );
     const numAnswers = this.state.qadata[this.state.qaIndex].incorrect_answers
       .length;
     let newArray = [];
@@ -117,7 +70,9 @@ class QuizQA extends Component {
     }
 
     this.setState({
-      randomAnswers: newArray
+      randomAnswers: newArray,
+
+      isFetching: false
     });
   }
 
@@ -153,55 +108,83 @@ class QuizQA extends Component {
   _handleChangeNextItem() {
     console.log("clicked Next  ");
 
-    this.setState(
-      prevState => ({
-        qaShowAnswer: !prevState.qaShowAnswer,
-        qaIndex: prevState.qaIndex + 1
-      }),
-      () => {
-        this.randomizeAnswers();
-      }
-    );
+    // updateQuestionCounter={this.updateQuestionCounter}
+    // updateGamesPlayedCounter={this.updateGamesPlayedCounter}
+
+    if (this.state.numQuestions === this.state.qaCounter) {
+      console.log(" Done with questions");
+      this.props.updateGamesPlayedCounter(
+        this.props.gamesPlayed + 1,
+        this.state.qaScore
+      );
+      // /UPDATE THE DATABASE HERE
+      this._handleupdateDB();
+    } else {
+      this.setState(
+        prevState => ({
+          qaShowAnswer: !prevState.qaShowAnswer,
+          qaIndex: prevState.qaIndex + 1
+        }),
+        () => {
+          this.randomizeAnswers();
+        }
+      );
+    }
+  }
+
+  _handleupdateDB() {
+    console.log("IN UPDATE DB");
   }
 
   componentDidMount() {
-    this.dummfunc();
+    console.log(" In quiz QA", this.props.questionsArray);
+    this.setupQuiz();
   }
+
   render() {
     return (
       <div>
-        <div>
-          {" "}
-          {"Current Score  "}
-          {this.state.qaScore}
-        </div>
-        {"In QUIZ QA "}
-
-        <div>
-          <p> {this.state.qadata[this.state.qaIndex].question}</p>
-
-          <ButtonGroup toggle className="mt-3">
-            {this.state.randomAnswers.map((answer, index) => {
-              return (
-                <ToggleButton
-                  type="radio"
-                  name="selectedAnswer"
-                  defaultChecked
-                  value={this.state.randomAnswers[index]}
-                  onChange={this.handleChangeAnswerChosen}
-                  disabled={this.state.qaShowAnswer}
-                >
-                  {this.state.randomAnswers[index]}
-                </ToggleButton>
-              );
-            })}
-          </ButtonGroup>
-        </div>
-
-        {this.state.qaShowAnswer && (
+        {this.state.isFetching ? (
+          <div> "Fetching data" </div>
+        ) : (
           <div>
-            <div> {this.state.qadata[this.state.qaIndex].correct_answer}</div>
-            <Button onClick={this._handleChangeNextItem}>NEXT</Button>
+            <div>
+              {"Current Score  "}
+              {this.state.qaScore}
+            </div>
+
+            {"In QUIZ QA "}
+
+            <div>
+              <p> {this.state.qadata[this.state.qaIndex].question}</p>
+
+              <ButtonGroup toggle className="mt-3">
+                {this.state.randomAnswers.map((answer, index) => {
+                  return (
+                    <ToggleButton
+                      type="radio"
+                      name="selectedAnswer"
+                      defaultChecked
+                      value={this.state.randomAnswers[index]}
+                      onChange={this.handleChangeAnswerChosen}
+                      disabled={this.state.qaShowAnswer}
+                    >
+                      {this.state.randomAnswers[index]}
+                    </ToggleButton>
+                  );
+                })}
+              </ButtonGroup>
+            </div>
+
+            {this.state.qaShowAnswer && (
+              <div>
+                <div>
+                  {" "}
+                  {this.state.qadata[this.state.qaIndex].correct_answer}
+                </div>
+                <Button onClick={this._handleChangeNextItem}>NEXT</Button>
+              </div>
+            )}
           </div>
         )}
       </div>

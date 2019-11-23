@@ -46,23 +46,44 @@ class App extends Component {
       validUser: 0,
       startGame: 1,
       gamesPlayed: 0,
-      questionsArray: []
+      questionsArray: [],
+      scorePct: 0,
+      isFetching: false
     };
 
     this.updateGamesPlayedCounter = this.updateGamesPlayedCounter.bind(this);
     this.addQuestionsToArray = this.addQuestionsToArray.bind(this);
+    this.updateQuestionCounter = this.updateQuestionCounter.bind(this);
   }
 
   // add and update functions
   addQuestionsToArray(response) {
     this.setState({
-      questionsArray: response
+      questionsArray: response,
+      isSetupDone: 1,
+      quizInPlay: 1,
+      numQuestions: response.length
     });
     console.log(response);
   }
 
-  updateGamesPlayedCounter(count) {
-    this.setState.gamesPlayed = count;
+  // questionCounter
+  updateQuestionCounter(count) {
+    this.setState({ questionCounter: count });
+  }
+
+  // games counter
+  updateGamesPlayedCounter(count, score) {
+    this.setState(
+      {
+        gamesPlayed: count,
+        quizInPlay: 0,
+        scorePct: Number.parseInt((100 * score) / this.state.numQuestions)
+      },
+      () => {
+        console.log("Score pct  ", this.state.scorePct);
+      }
+    );
   }
 
   // render
@@ -121,12 +142,18 @@ class App extends Component {
                     gamesPlayed={gamesPlayed}
                     updateGamesPlayedCounter={updateGamesPlayedCounter}
                   /> */}
-                <QuizQA questionsArray={this.state.questionsArray} />
+                <QuizQA
+                  questionsArray={this.state.questionsArray}
+                  updateQuestionCounter={this.updateQuestionCounter}
+                  updateGamesPlayedCounter={this.updateGamesPlayedCounter}
+                  gamesPlayed={this.state.gamesPlayed}
+                />
               </div>
             )}
             {/*  */}
-            {this.state.questionCounter === this.state.numQuestions &&
-              this.state.gamesPlayed > 0 && <div>"EOQ" </div>}
+            {this.state.quizInPlay === 0 && this.state.gamesPlayed > 0 && (
+              <div>"EOQ" </div>
+            )}
             {/*  */}
           </Col>
 
