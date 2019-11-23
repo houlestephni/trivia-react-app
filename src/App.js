@@ -3,6 +3,10 @@
 import React, { Component } from "react";
 import { Container, Row, Col } from "reactstrap";
 
+// components
+import QuizQA from "./components/quizQA_sm";
+import QuizSetup from "./components/QuizSetup_sah";
+
 // dependencies
 import axios from "axios";
 
@@ -43,10 +47,21 @@ class App extends Component {
       gamesPlayed: 0,
       questionsArray: []
     };
+
+    this.updateGamesPlayedCounter = this.updateGamesPlayedCounter.bind(this);
+    this.addQuestionsToArray = this.addQuestionsToArray.bind(this);
   }
 
+  // add and update functions
   addQuestionsToArray(response) {
-    response.array.forEach(element => {});
+    this.setState({
+      questionsArray: response
+    });
+    console.log(response);
+  }
+
+  updateGamesPlayedCounter(count) {
+    this.setState.gamesPlayed = count;
   }
 
   // render
@@ -86,17 +101,28 @@ class App extends Component {
             {/*  */}
             {this.state.quizInPlay === 0 &&
               this.state.isSetupDone === 0 &&
-              this.state.startGame === 1 && <div>"Quiz Setup"</div>}
-            {/*  */}
-            {this.state.isSetupDone === 1 &&
-              this.state.quizInPlay === 1 &&
-              this.state.questionCounter < this.state.numQuestions && (
+              this.state.startGame === 1 && (
                 <div>
-                  <div>"Quiz New Game Button"</div>
-                  <div>"Session Score" </div>
-                  <div> "Quiz QA" </div>
+                  "Quiz Setup"{" "}
+                  <QuizSetup
+                    questionsArray={this.state.questionsArray}
+                    addQuestionsToArray={this.addQuestionsToArray}
+                  />
                 </div>
               )}
+            {/*  */}
+            {this.state.isSetupDone === 1 && this.state.quizInPlay === 1 && (
+              // this.state.questionCounter < this.state.numQuestions &&
+              <div>
+                <div>"Quiz New Game Button"</div>
+                {/* <QuizQA
+                    questionsArray={questionsArray}
+                    gamesPlayed={gamesPlayed}
+                    updateGamesPlayedCounter={updateGamesPlayedCounter}
+                  /> */}
+                <QuizQA />
+              </div>
+            )}
             {/*  */}
             {this.state.questionCounter === this.state.numQuestions &&
               this.state.gamesPlayed > 0 && <div>"EOQ" </div>}
