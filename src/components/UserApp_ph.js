@@ -51,20 +51,23 @@ class App extends Component {
 	render() {
 		return (
 			<div className="App">
-				<UserNavbar
-					updateUser={this.updateUser}
-					loggedIn={this.state.loggedIn}
-				/>
-				{/* greet user if logged in: */}
-				{this.state.loggedIn && (
-					<p>Let's play some trivia, {this.state.username}!</p>
+				{loggedIn ? (
+					<div className="loggedIn">
+						<UserNavbar
+							updateUser={this.updateUser}
+							loggedIn={this.state.loggedIn}
+						/>
+						{/* greet user if logged in: */}
+						{this.state.loggedIn && (
+							<p>Let's play some trivia, {this.state.username}!</p>
+						)}
+					</div>
+				) : (
+					<div className="notLoggedIn">
+						<h4>Please log in to play the game</h4>
+						<LoginForm updateUser={this.updateUser} />
+					</div>
 				)}
-				{/* Routes to different components */}
-				<Route
-					path="/login"
-					render={() => <LoginForm updateUser={this.updateUser} />}
-				/>
-				<Route path="/signup" render={() => <Signup />} />
 			</div>
 		);
 	}
