@@ -2,7 +2,20 @@
 // Changed above line to below to access 'Component'
 import React, { Component } from "react";
 import { Container, Row, Col } from "reactstrap";
+<<<<<<< HEAD
 import QuizSetup from "./components/QuizSetup_sah";
+=======
+
+// components
+import QuizQA from "./components/quizQA_sm";
+import QuizSetup from "./components/QuizSetup_sah";
+// import LoginForm from "./components/Login_ph";
+// import UserNavbar from "./components/UserNavbar_ph";
+// import Signup from "./components/NewUser_ph";
+import NewGameButton from "./components/NewGameButton_sah";
+import EndOfQuiz from "./components/EndOfQuiz_sah";
+
+>>>>>>> 08159c517bf88b2f5b21139c873746759e134f5b
 // dependencies
 import axios from "axios";
 
@@ -14,6 +27,7 @@ import "./custom.scss";
 import "./css/custom.css";
 import logo from "./logo.svg";
 import "./App.css";
+import { tsExpressionWithTypeArguments } from "@babel/types";
 
 // set baseURL
 let baseURL = process.env.REACT_APP_BASEURL;
@@ -41,17 +55,75 @@ class App extends Component {
       validUser: 0,
       startGame: 1,
       gamesPlayed: 0,
-      questionsArray: []
+      questionsArray: [],
+      scorePct: 0,
+      isFetching: false
     };
+
+    this.updateGamesPlayedCounter = this.updateGamesPlayedCounter.bind(this);
     this.addQuestionsToArray = this.addQuestionsToArray.bind(this);
+    this.updateQuestionCounter = this.updateQuestionCounter.bind(this);
+    this.updateDB = this.updateDB.bind(this);
+    this.startNewGame = this.startNewGame.bind(this);
   }
 
-  addQuestionsToArray(response) {
-    // response.array.forEach(element => {});
+  //Restart--go to Quiz Start
+  startNewGame() {
+    console.log("clicked new game");
     this.setState({
-      questionsArray: response
+      quizInPlay: 0,
+      isSetupDone: 0,
+      startGame: 0
+    });
+  }
+
+  // add and update functions
+  addQuestionsToArray(response) {
+    this.setState({
+      questionsArray: response,
+      isSetupDone: 1,
+      quizInPlay: 1,
+      numQuestions: response.length
     });
     console.log(response);
+  }
+
+  // questionCounter
+  updateQuestionCounter(count) {
+    this.setState({ questionCounter: count });
+  }
+
+  // games counter
+  updateGamesPlayedCounter(count, score) {
+    this.setState(
+      {
+        gamesPlayed: count,
+        quizInPlay: 0,
+        scorePct: Number.parseInt((100 * score) / this.state.numQuestions)
+      },
+      () => {
+        console.log("Score pct  ", this.state.scorePct);
+        this.updateDB();
+      }
+    );
+  }
+
+  async updateDB() {
+    try {
+      const user = "abc";
+      const level = this.state.difficultyOfQuestions;
+      const score = this.state.scorePct;
+
+      axios
+        .get(
+          `http://localhost:3003/trivia/update?user=${user}&difficulty=${level}&score=${score}`
+        )
+        .then(response => {
+          console.log(response);
+        });
+    } catch (error) {
+      console.log("api fail", error);
+    }
   }
 
   // render
@@ -62,6 +134,9 @@ class App extends Component {
         {/*  */}
         {/*  */}
         {/* Header  + Login/Signup */}
+        {/* <LoginForm />
+        <UserNavbar />
+        <Signup /> */}
 
         <Row>
           {/* <div className="quizrow"> */}
@@ -92,7 +167,7 @@ class App extends Component {
               this.state.isSetupDone === 0 &&
               this.state.startGame === 1 && (
                 <div>
-                  "Quiz Setup"
+                  "Quiz Setup"{" "}
                   <QuizSetup
                     questionsArray={this.state.questionsArray}
                     addQuestionsToArray={this.addQuestionsToArray}
@@ -100,18 +175,39 @@ class App extends Component {
                 </div>
               )}
             {/*  */}
-            {this.state.isSetupDone === 1 &&
-              this.state.quizInPlay === 1 &&
-              this.state.questionCounter < this.state.numQuestions && (
+            {this.state.isSetupDone === 1 && this.state.quizInPlay === 1 && (
+              // this.state.questionCounter < this.state.numQuestions &&
+              <div>
+                <div>"Quiz New Game Button"</div>
                 <div>
-                  <div>"Quiz New Game Button"</div>
-                  <div>"Session Score" </div>
-                  <div> "Quiz QA" </div>
+                  "Quiz New Game Button"{" "}
+                  <NewGameButton startNewGame={this.startNewGame} />
                 </div>
-              )}
+
+                {/* <QuizQA
+                    questionsArray={questionsArray}
+                    gamesPlayed={gamesPlayed}
+                    updateGamesPlayedCounter={updateGamesPlayedCounter}
+                  /> */}
+                <QuizQA
+                  questionsArray={this.state.questionsArray}
+                  updateQuestionCounter={this.updateQuestionCounter}
+                  updateGamesPlayedCounter={this.updateGamesPlayedCounter}
+                  gamesPlayed={this.state.gamesPlayed}
+                />
+              </div>
+            )}
             {/*  */}
-            {this.state.questionCounter === this.state.numQuestions &&
-              this.state.gamesPlayed > 0 && <div>"EOQ" </div>}
+            {this.state.quizInPlay === 0 && this.state.gamesPlayed > 0 && (
+              <div>
+                "EOQ"{" "}
+                <EndOfQuiz
+                  scorePct={this.state.scorePct}
+                  numQuestions={this.state.numQuestions}
+                  startNewGame={this.startNewGame}
+                />
+              </div>
+            )}
             {/*  */}
           </Col>
 
