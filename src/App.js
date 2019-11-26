@@ -8,10 +8,12 @@ import QuizQA from "./components/quizQA_sm";
 import QuizSetup from "./components/QuizSetup_sah";
 // import LoginForm from "./components/Login_ph";
 // import UserNavbar from "./components/UserNavbar_ph";
-// import Signup from "./components/NewUser_ph";
+import Signup from "./components/NewUser_ph";
 import NewGameButton from "./components/NewGameButton_sah";
 import EndOfQuiz from "./components/EndOfQuiz_sah";
-
+// import UserApp from "./components/UserApp_ph";
+import LoginForm from "./components/Login_ph.js";
+import Leaderboard from "./components/Leaderboard_sm";
 // dependencies
 import axios from "axios";
 
@@ -53,7 +55,9 @@ class App extends Component {
       gamesPlayed: 0,
       questionsArray: [],
       scorePct: 0,
-      isFetching: false
+      isFetching: false,
+      loggedIn: false,
+      username: ""
     };
 
     this.updateGamesPlayedCounter = this.updateGamesPlayedCounter.bind(this);
@@ -61,6 +65,13 @@ class App extends Component {
     this.updateQuestionCounter = this.updateQuestionCounter.bind(this);
     this.updateDB = this.updateDB.bind(this);
     this.startNewGame = this.startNewGame.bind(this);
+    this.updateUserStatus = this.updateUserStatus.bind(this);
+  }
+
+  // updateUserStatus
+  updateUserStatus(username) {
+    this.setState({ username: username, validUser: 1, loggedIn: true });
+    console.log(username);
   }
 
   //Restart--go to Quiz Start
@@ -74,12 +85,13 @@ class App extends Component {
   }
 
   // add and update functions
-  addQuestionsToArray(response) {
+  addQuestionsToArray(response, level) {
     this.setState({
       questionsArray: response,
       isSetupDone: 1,
       quizInPlay: 1,
-      numQuestions: response.length
+      numQuestions: response.length,
+      difficultyLevel: level
     });
     console.log(response);
   }
@@ -106,14 +118,19 @@ class App extends Component {
 
   async updateDB() {
     try {
-      const user = "abc";
-      const level = this.state.difficultyOfQuestions;
+      const username = this.state.username;
+      const level = this.state.difficultyLevel;
       const score = this.state.scorePct;
 
+      let payloadobj = {
+        username: this.state.username,
+        level: this.state.difficultyLevel,
+        score: this.state.scorePct
+      };
+
+      console.log(payloadobj);
       axios
-        .get(
-          `http://localhost:3003/trivia/update?user=${user}&difficulty=${level}&score=${score}`
-        )
+        .post(`http://localhost:3003/trivia/update`, payloadobj)
         .then(response => {
           console.log(response);
         });
@@ -133,6 +150,12 @@ class App extends Component {
         {/* <LoginForm />
         <UserNavbar />
         <Signup /> */}
+        <Signup
+          loggedIn={this.state.loggedIn}
+          updateUserStatus={this.updateUserStatus}
+        />
+
+        <LoginForm updateUserStatus={this.updateUserStatus} />
 
         <Row>
           {/* <div className="quizrow"> */}
@@ -210,7 +233,7 @@ class App extends Component {
 
           {/* Leaderboard */}
           <Col lg={4} md={4} sm={4} xs={12}>
-            Leaderboard
+            <Leaderboard />
           </Col>
         </Row>
         {/* Don't code below this */}

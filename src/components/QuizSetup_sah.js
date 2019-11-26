@@ -7,7 +7,7 @@ class QuizSetup extends Component {
   constructor() {
     super();
     this.state = {
-      numberOfQuestions: "10",
+      numberOfQuestions: "1",
       difficultyOfQuestions: "easy",
       typeOfQuestions: "multiple",
       questionsArray: []
@@ -31,7 +31,10 @@ class QuizSetup extends Component {
         questionsArray: quizSet
       },
       () => {
-        this.props.addQuestionsToArray(response.data.results);
+        this.props.addQuestionsToArray(
+          response.data.results,
+          this.state.difficultyOfQuestions
+        );
       }
     );
   }

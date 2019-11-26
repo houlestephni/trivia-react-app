@@ -24,30 +24,29 @@ class LoginForm extends Component {
     event.preventDefault();
     // console.log("handleSubmit");
 
+    let payloadobj = {
+      username: this.state.username,
+      password: this.state.password
+    };
+
     axios
-      .post("/user/login", {
-        username: this.state.username,
-        password: this.state.password
-      })
+      .post(`http://localhost:3003/trivia/login`, payloadobj)
       .then(response => {
-        // console.log("login response: ");
-        // console.log(response);
-        if (response.status === 200) {
-          // update App.js state
-          this.props.updateUser({
-            loggedIn: true,
-            username: response.data.username
-          });
-          // update the state to redirect to home
-          this.setState({
-            redirectTo: "/"
-          });
+        console.log("login response: ");
+        console.log(response);
+        if (response.status === 200 && response.data.success) {
+          console.log("success ");
+          alert("Successful login");
+          this.props.updateUserStatus(this.state.username);
+        } else {
+          console.log(" something went wrong");
+          alert("incorrect username or login. try again");
         }
       })
       .catch(error => {
         console.log("login error: ");
         console.log(error);
-        alert("incorrect password, try again");
+        alert("something went wrong, try again");
       });
   }
 
