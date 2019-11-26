@@ -16,8 +16,8 @@ class QuizStart extends Component {
   render() {
     return (
       <div>
-        <Link to="/setup">Click to set up your game!</Link>
-        <Route path="/setup" exact component={QuizSetup} />
+        <h1>Test Your Trivia Knowlege!</h1>
+        <button onClick={this.props.startNewGame}>Start Game</button>
       </div>
     );
   }
