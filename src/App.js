@@ -67,7 +67,6 @@ class App extends Component {
 
   //Restart--go to Quiz Start
   startNewGame() {
-    console.log("clicked new game");
     this.setState({
       quizInPlay: 0,
       isSetupDone: 0,

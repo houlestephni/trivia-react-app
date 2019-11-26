@@ -18,6 +18,8 @@ class QuizStart extends Component {
       <div>
         <h1>Test Your Trivia Knowlege!</h1>
         <button onClick={this.props.startNewGame}>Start Game</button>
+        {/* <Link to="/setup">Click to set up your game!</Link>
+        <Route path="/setup" exact component={QuizSetup} /> */}
       </div>
     );
   }

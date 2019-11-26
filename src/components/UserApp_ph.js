@@ -66,17 +66,34 @@ class UserApp extends Component {
     console.log("displaysignup:", this.state.displaySignUp);
   }
 
-  // condition ? value_if_true : value_if_false
   render() {
     return (
       <div className="App">
-        <button onClick={this.displayLogIn}>Log In</button>
+        {this.state.loggedIn ? (
+          <div className="loggedIn">
+            <UserNavbar
+              updateUser={this.updateUser}
+              loggedIn={this.state.loggedIn}
+            />
+            {this.state.loggedIn && (
+              <p>Let's play some trivia, {this.state.username}!</p>
+            )}
+          </div>
+        ) : (
+          <div className="notLoggedIn">
+            <button onClick={this.displayLogIn}>Log In</button>
+            <button onClick={this.newUser}>Sign Up</button>
 
-        <button onClick={this.newUser}>Sign Up</button>
-        {this.state.displayLogIn && <LoginForm updateUser={this.updateUser} />}
-        {this.state.displaySignUp && <Signup />}
+            {this.state.displayLogIn && (
+              <LoginForm updateUser={this.updateUser} />
+            )}
+
+            {this.state.displaySignUp && <Signup />}
+          </div>
+        )}
       </div>
     );
   }
 }
+
 export default UserApp;
