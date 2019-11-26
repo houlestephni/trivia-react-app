@@ -57,7 +57,9 @@ class App extends Component {
       scorePct: 0,
       isFetching: false,
       loggedIn: false,
-      username: ""
+      username: "",
+      highScore: 0,
+      leadingUser: ""
     };
 
     this.updateGamesPlayedCounter = this.updateGamesPlayedCounter.bind(this);
@@ -66,12 +68,18 @@ class App extends Component {
     this.updateDB = this.updateDB.bind(this);
     this.startNewGame = this.startNewGame.bind(this);
     this.updateUserStatus = this.updateUserStatus.bind(this);
+    this.updateLeadUserStatus = this.updateLeadUserStatus.bind(this);
   }
 
   // updateUserStatus
   updateUserStatus(username) {
     this.setState({ username: username, validUser: 1, loggedIn: true });
     console.log(username);
+  }
+
+  // updateUserStatus
+  updateLeadUserStatus(user, score) {
+    this.setState({ leadingUser: user, highScore: score });
   }
 
   //Restart--go to Quiz Start
@@ -233,7 +241,7 @@ class App extends Component {
 
           {/* Leaderboard */}
           <Col lg={4} md={4} sm={4} xs={12}>
-            <Leaderboard />
+            <Leaderboard updateLeadUserStatus={this.updateLeadUserStatus} />
           </Col>
         </Row>
         {/* Don't code below this */}

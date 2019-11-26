@@ -27,8 +27,12 @@ class Leaderboard extends Component {
     console.log("highscore:", response.data[0].highScore);
 
     const quizSet = response.data.results;
-    // this.setState(
-    //   {
+
+    this.setState({
+      highScoringUser: response.data[0].username,
+      highScore: response.data[0].highScore
+    });
+
     //     questionsArray: quizSet
     //   },
     //   () => {
@@ -38,6 +42,11 @@ class Leaderboard extends Component {
     //     );
     //   }
     // );
+
+    this.props.updateLeadUserStatus(
+      this.state.highScoringUser,
+      this.state.highScore
+    );
   }
 
   async callLeaderboardAPI() {
@@ -64,6 +73,8 @@ class Leaderboard extends Component {
     return (
       <div>
         <h1>Leaderboard Values here</h1>
+        <p>{this.state.highScoringUser}</p>
+        <p>{this.state.highScore}</p>
       </div>
     );
   }
