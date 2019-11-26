@@ -1,6 +1,14 @@
 import React, { Component } from "react";
+import axios from "axios";
 
 class Leaderboard extends Component {
+  async getHighScores() {
+    const response = await axios.get(`http://localhost:3003/trivia`);
+    const highScores = response.data;
+
+    this.setState({ holidays: holidays });
+  }
+
   render() {
     return (
       <div>

@@ -12,10 +12,7 @@ class QuizSetup extends Component {
       typeOfQuestions: "multiple",
       questionsArray: []
     };
-<<<<<<< HEAD
-=======
     this.saveQuestions = this.saveQuestions.bind(this);
->>>>>>> 08159c517bf88b2f5b21139c873746759e134f5b
     this.handleClick = this.handleClick.bind(this);
     this.callTriviaAPI = this.callTriviaAPI.bind(this);
   }
@@ -23,12 +20,6 @@ class QuizSetup extends Component {
   handleClick(event) {
     event.preventDefault();
     this.setState({ [event.currentTarget.name]: event.currentTarget.value });
-<<<<<<< HEAD
-
-    console.log(event.currentTarget.name, ":", event.currentTarget.value);
-  }
-
-=======
     console.log(event.currentTarget.name, ":", event.currentTarget.value);
   }
 
@@ -45,24 +36,12 @@ class QuizSetup extends Component {
     );
   }
 
->>>>>>> 08159c517bf88b2f5b21139c873746759e134f5b
   async callTriviaAPI() {
     try {
       const number = this.state.numberOfQuestions;
       const level = this.state.difficultyOfQuestions;
       const type = this.state.typeOfQuestions;
 
-<<<<<<< HEAD
-      const response = await axios.get(
-        `https://opentdb.com/api.php?amount=${number}&category=9&difficulty=${level}&type=${type}`
-      );
-      console.log("api request:", response.data.results);
-      const quizSet = response.data.results;
-      this.setState({
-        questionsArray: quizSet
-      });
-      this.props.addQuestionsToArray(response.data.results);
-=======
       axios
         .get(
           `https://opentdb.com/api.php?amount=${number}&category=9&difficulty=${level}&type=${type}`
@@ -70,7 +49,6 @@ class QuizSetup extends Component {
         .then(response => {
           this.saveQuestions(response);
         });
->>>>>>> 08159c517bf88b2f5b21139c873746759e134f5b
     } catch (error) {
       console.log("api fail", error);
     }

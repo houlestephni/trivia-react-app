@@ -2,9 +2,6 @@
 // Changed above line to below to access 'Component'
 import React, { Component } from "react";
 import { Container, Row, Col } from "reactstrap";
-<<<<<<< HEAD
-import QuizSetup from "./components/QuizSetup_sah";
-=======
 
 // components
 import QuizQA from "./components/quizQA_sm";
@@ -15,7 +12,6 @@ import QuizSetup from "./components/QuizSetup_sah";
 import NewGameButton from "./components/NewGameButton_sah";
 import EndOfQuiz from "./components/EndOfQuiz_sah";
 
->>>>>>> 08159c517bf88b2f5b21139c873746759e134f5b
 // dependencies
 import axios from "axios";
 
