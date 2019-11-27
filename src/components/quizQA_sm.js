@@ -118,7 +118,7 @@ class QuizQA extends Component {
         this.state.qaScore
       );
       // /UPDATE THE DATABASE HERE
-      this._handleupdateDB();
+      // this._handleupdateDB();
     } else {
       this.setState(
         prevState => ({

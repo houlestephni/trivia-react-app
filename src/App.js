@@ -13,6 +13,8 @@ import NewGameButton from "./components/NewGameButton_sah";
 import EndOfQuiz from "./components/EndOfQuiz_sah";
 // import UserApp from "./components/UserApp_ph";
 import LoginForm from "./components/Login_ph.js";
+import LogoutButton from "./components/LogoutButton_sm";
+
 import Leaderboard from "./components/Leaderboard_sm";
 // dependencies
 import axios from "axios";
@@ -26,6 +28,7 @@ import "./css/custom.css";
 import logo from "./logo.svg";
 import "./App.css";
 import { tsExpressionWithTypeArguments } from "@babel/types";
+// import LogoutButton from "./components/LogoutButton_sm";
 
 // set baseURL
 let baseURL = process.env.REACT_APP_BASEURL;
@@ -69,12 +72,20 @@ class App extends Component {
     this.startNewGame = this.startNewGame.bind(this);
     this.updateUserStatus = this.updateUserStatus.bind(this);
     this.updateLeadUserStatus = this.updateLeadUserStatus.bind(this);
+    this.updateLeaderBoard = this.updateLeaderBoard.bind(this);
+    this.logoutUser = this.logoutUser.bind(this);
   }
 
   // updateUserStatus
   updateUserStatus(username) {
     this.setState({ username: username, validUser: 1, loggedIn: true });
     console.log(username);
+  }
+
+  // updateUserStatus
+  logoutUser() {
+    this.setState({ username: "", validUser: 0, loggedIn: false });
+    // console.log(username);
   }
 
   // updateUserStatus
@@ -119,9 +130,40 @@ class App extends Component {
       },
       () => {
         console.log("Score pct  ", this.state.scorePct);
-        this.updateDB();
+        if (this.state.loggedIn) {
+          this.updateDB().then(() => {
+            if (this.state.highScore < this.state.scorePct) {
+              console.log("next to leaderboard");
+              // this.updateLeaderBoard();
+            }
+          });
+        }
       }
     );
+  }
+
+  async updateLeaderBoard() {
+    try {
+      let payloadobj = {
+        username: this.state.username,
+        score: this.state.scorePct,
+        prevleader: this.state.leadingUser
+      };
+      // payloadobj.score = 110;
+      console.log(payloadobj);
+      axios
+        .post(`http://localhost:3003/leaderboard/update`, payloadobj)
+        .then(response => {
+          console.log(response);
+        });
+
+      this.setState({
+        leadingUser: this.state.username,
+        highScore: this.state.scorePct
+      });
+    } catch (error) {
+      console.log("api fail", error);
+    }
   }
 
   async updateDB() {
@@ -141,6 +183,11 @@ class App extends Component {
         .post(`http://localhost:3003/trivia/update`, payloadobj)
         .then(response => {
           console.log(response);
+          /// remove after testing;
+          if (this.state.highScore < this.state.scorePct)
+            // if (true) {
+            console.log("next to leaderboard...in updatedb.");
+          this.updateLeaderBoard();
         });
     } catch (error) {
       console.log("api fail", error);
@@ -158,12 +205,23 @@ class App extends Component {
         {/* <LoginForm />
         <UserNavbar />
         <Signup /> */}
-        <Signup
-          loggedIn={this.state.loggedIn}
-          updateUserStatus={this.updateUserStatus}
-        />
+        {!this.state.loggedIn && (
+          <Signup
+            loggedIn={this.state.loggedIn}
+            updateUserStatus={this.updateUserStatus}
+          />
+        )}
 
-        <LoginForm updateUserStatus={this.updateUserStatus} />
+        {!this.state.loggedIn && (
+          <LoginForm updateUserStatus={this.updateUserStatus} />
+        )}
+
+        {this.state.loggedIn && (
+          <LogoutButton
+            username={this.state.username}
+            logoutUser={this.logoutUser}
+          />
+        )}
 
         <Row>
           {/* <div className="quizrow"> */}
