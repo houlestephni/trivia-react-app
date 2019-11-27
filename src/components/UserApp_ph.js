@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { Route, Link } from "react-router-dom";
+import Button from "react-bootstrap/Button";
+
 // components
 import Signup from "./NewUser_ph";
 import LoginForm from "./Login_ph.js";
@@ -81,8 +83,12 @@ class UserApp extends Component {
           </div>
         ) : (
           <div className="notLoggedIn">
-            <button onClick={this.displayLogIn}>Log In</button>
-            <button onClick={this.newUser}>Sign Up</button>
+            <Button onClick={this.displayLogIn} variant="outline-info">
+              Log In
+            </Button>
+            <Button onClick={this.newUser} variant="outline-info">
+              Sign Up
+            </Button>
 
             {this.state.displayLogIn && (
               <LoginForm updateUser={this.updateUser} />

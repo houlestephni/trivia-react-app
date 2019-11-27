@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import axios from "axios";
 import { DropdownButton } from "react-bootstrap";
 import { Dropdown } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 
 class QuizSetup extends Component {
   constructor() {
@@ -44,7 +45,7 @@ class QuizSetup extends Component {
 
       axios
         .get(
-          `https://opentdb.com/api.php?amount=${number}&category=9&difficulty=${level}&type=${type}`
+          `https://opentdb.com/api.php?amount=${number}&category=9&difficulty=${level}&type=${type}&encode=url3986`
         )
         .then(response => {
           this.saveQuestions(response);
@@ -58,7 +59,12 @@ class QuizSetup extends Component {
     return (
       <div>
         <h1>Create Your Quiz!</h1>
-        <DropdownButton id="dropdown-item-button" title="Number of Questions">
+        <DropdownButton
+          id="dropdown-item-button"
+          title="Number of Questions"
+          variant="info"
+          size="lg"
+        >
           <Dropdown.Item
             onClick={this.handleClick}
             as="button"
@@ -92,7 +98,12 @@ class QuizSetup extends Component {
             20
           </Dropdown.Item>
         </DropdownButton>
-        <DropdownButton id="dropdown-item-button" title="Difficulty">
+        <DropdownButton
+          id="dropdown-item-button"
+          title="Difficulty"
+          variant="info"
+          size="lg"
+        >
           <Dropdown.Item
             as="button"
             name="difficultyOfQuestions"
@@ -118,7 +129,12 @@ class QuizSetup extends Component {
             Hard
           </Dropdown.Item>
         </DropdownButton>
-        <DropdownButton id="dropdown-item-button" title="Answer Type">
+        <DropdownButton
+          id="dropdown-item-button"
+          title="Answer Type"
+          variant="info"
+          size="lg"
+        >
           <Dropdown.Item
             as="button"
             name="typeOfQuestions"
@@ -136,7 +152,9 @@ class QuizSetup extends Component {
             True/False
           </Dropdown.Item>
         </DropdownButton>
-        <button onClick={this.callTriviaAPI}>GO</button>
+        <Button onClick={this.callTriviaAPI} variant="info" size="lg">
+          GO
+        </Button>
       </div>
     );
   }

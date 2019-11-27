@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { Route, Link } from "react-router-dom";
+import Button from "react-bootstrap/Button";
+
 // components
 import QuizSetup from "./QuizSetup_sah.js";
 
@@ -17,7 +19,9 @@ class QuizStart extends Component {
     return (
       <div>
         <h1>Test Your Trivia Knowlege!</h1>
-        <button onClick={this.props.startNewGame}>Start Game</button>
+        <Button onClick={this.props.startNewGame} variant="info" size="lg">
+          Start Game
+        </Button>
         {/* <Link to="/setup">Click to set up your game!</Link>
         <Route path="/setup" exact component={QuizSetup} /> */}
       </div>

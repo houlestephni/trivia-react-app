@@ -149,19 +149,24 @@ class QuizQA extends Component {
         ) : (
           <div>
             <div>
-              {"Current Score  "}
-              {this.state.qaScore}
+              <h4>
+                {"Current Score : "}
+                {this.state.qaScore}
+              </h4>
             </div>
-
-            {"In QUIZ QA "}
-
             <div>
-              <p> {this.state.qadata[this.state.qaIndex].question}</p>
+              <h4>
+                {" "}
+                {decodeURIComponent(
+                  this.state.qadata[this.state.qaIndex].question
+                )}
+              </h4>
 
-              <ButtonGroup toggle className="mt-3">
+              <ButtonGroup toggle className="mt-3" size="lg">
                 {this.state.randomAnswers.map((answer, index) => {
                   return (
                     <ToggleButton
+                      variant="info"
                       type="radio"
                       name="selectedAnswer"
                       defaultChecked
@@ -169,20 +174,29 @@ class QuizQA extends Component {
                       onChange={this.handleChangeAnswerChosen}
                       disabled={this.state.qaShowAnswer}
                     >
-                      {this.state.randomAnswers[index]}
+                      {decodeURIComponent(this.state.randomAnswers[index])}
                     </ToggleButton>
                   );
                 })}
               </ButtonGroup>
             </div>
-
+            <br></br>
             {this.state.qaShowAnswer && (
               <div>
                 <div>
-                  {" "}
-                  {this.state.qadata[this.state.qaIndex].correct_answer}
+                  {"Correct Answer: "}
+                  {decodeURIComponent(
+                    this.state.qadata[this.state.qaIndex].correct_answer
+                  )}
                 </div>
-                <Button onClick={this._handleChangeNextItem}>NEXT</Button>
+                <br></br>
+                <Button
+                  variant="info"
+                  size="lg"
+                  onClick={this._handleChangeNextItem}
+                >
+                  NEXT
+                </Button>
               </div>
             )}
           </div>

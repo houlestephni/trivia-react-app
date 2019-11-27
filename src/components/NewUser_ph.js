@@ -23,29 +23,54 @@ class Signup extends Component {
     console.log("new username created: " + this.state.username);
     event.preventDefault();
 
-    //request to server to add a new username/password
+    let payloadobj = {
+      username: this.state.username,
+      password: this.state.password
+    };
     axios
-      .post("/user/", {
-        username: this.state.username,
-        password: this.state.password
-      })
+      .post(`http://localhost:3003/trivia/signup`, payloadobj)
       .then(response => {
         console.log(response);
+        //
+
         if (!response.data.error) {
           console.log("successful signup");
-          this.setState({
-            //redirect to login page
-            redirectTo: "/login"
-          });
+          this.props.updateUserStatus(this.state.username);
+          // this.setState({
+          //   //redirect to login page
+          //   redirectTo: "/login"
+          // });
         } else {
           alert("username already taken");
           console.log(response.data.error);
         }
-      })
-      .catch(error => {
-        console.log("signup error: ");
-        console.log(error);
+
+        //
       });
+
+    //request to server to add a new username/password
+    // axios
+    //   .post("/user/", {
+    //     username: this.state.username,
+    //     password: this.state.password
+    //   })
+    //   .then(response => {
+    //     console.log(response);
+    //     if (!response.data.error) {
+    //       console.log("successful signup");
+    //       this.setState({
+    //         //redirect to login page
+    //         redirectTo: "/login"
+    //       });
+    //     } else {
+    //       alert("username already taken");
+    //       console.log(response.data.error);
+    //     }
+    //   })
+    //   .catch(error => {
+    //     console.log("signup error: ");
+    //     console.log(error);
+    //   });
   }
 
   render() {
@@ -55,7 +80,7 @@ class Signup extends Component {
       return (
         <div className="SignupForm">
           <h4>Sign up</h4>
-          <form className="form-horizontal">
+          <form>
             <div className="form-group">
               <div className="col-1 col-ml-auto">
                 <label className="form-label" htmlFor="username">
@@ -94,7 +119,7 @@ class Signup extends Component {
             <div className="form-group ">
               <div className="col-7"></div>
               <button
-                className="btn btn-primary col-1 col-mr-auto"
+                className="btn btn-info col-1 col-mr-auto"
                 onClick={this.handleSubmit}
                 type="submit"
               >
