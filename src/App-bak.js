@@ -6,8 +6,6 @@ import { Container, Row, Col } from "reactstrap";
 // components
 import QuizQA from "./components/quizQA_sm";
 import QuizSetup from "./components/QuizSetup_sah";
-import QuizStart from "./components/QuizStart_ph";
-
 // import LoginForm from "./components/Login_ph";
 // import UserNavbar from "./components/UserNavbar_ph";
 import Signup from "./components/NewUser_ph";
@@ -56,7 +54,7 @@ class App extends Component {
       difficultyLevel: "",
       quizType: "",
       validUser: 0,
-      startGame: 0,
+      startGame: 1,
       gamesPlayed: 0,
       questionsArray: [],
       scorePct: 0,
@@ -64,8 +62,7 @@ class App extends Component {
       loggedIn: false,
       username: "",
       highScore: 0,
-      leadingUser: "",
-      eoq: 0
+      leadingUser: ""
     };
 
     this.updateGamesPlayedCounter = this.updateGamesPlayedCounter.bind(this);
@@ -102,8 +99,7 @@ class App extends Component {
     this.setState({
       quizInPlay: 0,
       isSetupDone: 0,
-      startGame: 1,
-      eoq: 0
+      startGame: 0
     });
   }
 
@@ -128,7 +124,6 @@ class App extends Component {
   updateGamesPlayedCounter(count, score) {
     this.setState(
       {
-        eoq: 1,
         gamesPlayed: count,
         quizInPlay: 0,
         scorePct: Number.parseInt((100 * score) / this.state.numQuestions)
@@ -205,17 +200,23 @@ class App extends Component {
       <div className="App">
         {/* Don't code above this */}
         {/*  */}
+        {/*  */}
+        {/* Header  + Login/Signup */}
+        {/* <LoginForm />
+        <UserNavbar />
+        <Signup /> */}
 
         <Row>
           {/* <div className="quizrow"> */}
           {/* Header */}
-          <Col lg={7} md={7} sm={7} xs={12}>
+          <Col lg={8} md={8} sm={8} xs={12}>
             <div className="tr_header">
-              <h2>Trivia Circus</h2>
+              <span className="tr_header_span">TRIVIA APP HEADER</span>
             </div>
           </Col>
-          <Col lg={5} md={5} sm={5} xs={12}>
+          <Col lg={4} md={4} sm={4} xs={12}>
             {/* Login / Signup */}
+            <div className="tr_header">Login/Signup here </div>
             {/* {validUser===0? <LoginSignUpPrompt /> : <HelloUser> } */}
             {!this.state.loggedIn && (
               <Signup
@@ -224,9 +225,9 @@ class App extends Component {
               />
             )}
 
-            {/* {!this.state.loggedIn && (
+            {!this.state.loggedIn && (
               <LoginForm updateUserStatus={this.updateUserStatus} />
-            )} */}
+            )}
 
             {this.state.loggedIn && (
               <LogoutButton
@@ -239,56 +240,53 @@ class App extends Component {
         {/*  */}
         {/*  */}
 
-        <Row className="textcenter">
-          <Leaderboard updateLeadUserStatus={this.updateLeadUserStatus} />
-        </Row>
-
         {/* Quiz + Leaderboard */}
-        <Row className="triviamain">
+        <Row>
           {/* Quiz */}
-          {/* <Col lg={7} md={7} sm={7} xs={12}> */}
-          {this.state.quizInPlay === 0 &&
-            this.state.isSetupDone === 0 &&
-            this.state.startGame === 0 && (
+          <Col lg={8} md={8} sm={8} xs={12}>
+            Quiz components here
+            {this.state.quizInPlay === 0 &&
+              this.state.isSetupDone === 0 &&
+              this.state.startGame === 0 && <div> "QuizStart" </div>}
+            {/*  */}
+            {this.state.quizInPlay === 0 &&
+              this.state.isSetupDone === 0 &&
+              this.state.startGame === 1 && (
+                <div>
+                  "Quiz Setup"{" "}
+                  <QuizSetup
+                    questionsArray={this.state.questionsArray}
+                    addQuestionsToArray={this.addQuestionsToArray}
+                  />
+                </div>
+              )}
+            {/*  */}
+            {this.state.isSetupDone === 1 && this.state.quizInPlay === 1 && (
+              // this.state.questionCounter < this.state.numQuestions &&
               <div>
-                <QuizStart
-                  startGame={this.state.startGame}
-                  startNewGame={this.startNewGame}
-                />{" "}
-              </div>
-            )}
-          {/*  */}
-          {this.state.quizInPlay === 0 &&
-            this.state.isSetupDone === 0 &&
-            this.state.startGame === 1 && (
-              <div>
-                <QuizSetup
+                <div>"Quiz New Game Button"</div>
+                <div>
+                  "Quiz New Game Button"{" "}
+                  <NewGameButton startNewGame={this.startNewGame} />
+                </div>
+
+                {/* <QuizQA
+                    questionsArray={questionsArray}
+                    gamesPlayed={gamesPlayed}
+                    updateGamesPlayedCounter={updateGamesPlayedCounter}
+                  /> */}
+                <QuizQA
                   questionsArray={this.state.questionsArray}
-                  addQuestionsToArray={this.addQuestionsToArray}
+                  updateQuestionCounter={this.updateQuestionCounter}
+                  updateGamesPlayedCounter={this.updateGamesPlayedCounter}
+                  gamesPlayed={this.state.gamesPlayed}
                 />
               </div>
             )}
-          {/*  */}
-          {this.state.isSetupDone === 1 && this.state.quizInPlay === 1 && (
-            // this.state.questionCounter < this.state.numQuestions &&
-            <div>
+            {/*  */}
+            {this.state.quizInPlay === 0 && this.state.gamesPlayed > 0 && (
               <div>
-                <NewGameButton startNewGame={this.startNewGame} />
-              </div>
-
-              <QuizQA
-                questionsArray={this.state.questionsArray}
-                updateQuestionCounter={this.updateQuestionCounter}
-                updateGamesPlayedCounter={this.updateGamesPlayedCounter}
-                gamesPlayed={this.state.gamesPlayed}
-              />
-            </div>
-          )}
-          {/*  */}
-          {this.state.quizInPlay === 0 &&
-            this.state.gamesPlayed > 0 &&
-            this.state.eoq === 1 && (
-              <div>
+                "EOQ"{" "}
                 <EndOfQuiz
                   scorePct={this.state.scorePct}
                   numQuestions={this.state.numQuestions}
@@ -296,9 +294,14 @@ class App extends Component {
                 />
               </div>
             )}
-          {/*  */}
-        </Row>
+            {/*  */}
+          </Col>
 
+          {/* Leaderboard */}
+          <Col lg={4} md={4} sm={4} xs={12}>
+            <Leaderboard updateLeadUserStatus={this.updateLeadUserStatus} />
+          </Col>
+        </Row>
         {/* Don't code below this */}
       </div>
     );

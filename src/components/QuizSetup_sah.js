@@ -2,12 +2,13 @@ import React, { Component } from "react";
 import axios from "axios";
 import { DropdownButton } from "react-bootstrap";
 import { Dropdown } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 
 class QuizSetup extends Component {
   constructor() {
     super();
     this.state = {
-      numberOfQuestions: "1",
+      numberOfQuestions: "10",
       difficultyOfQuestions: "easy",
       typeOfQuestions: "multiple",
       questionsArray: []
@@ -31,10 +32,7 @@ class QuizSetup extends Component {
         questionsArray: quizSet
       },
       () => {
-        this.props.addQuestionsToArray(
-          response.data.results,
-          this.state.difficultyOfQuestions
-        );
+        this.props.addQuestionsToArray(response.data.results);
       }
     );
   }
@@ -60,8 +58,13 @@ class QuizSetup extends Component {
   render() {
     return (
       <div>
-        <h1>Create Your Quiz!</h1>
-        <DropdownButton id="dropdown-item-button" title="Number of Questions">
+        <h3>Create Your Quiz!</h3>
+        <DropdownButton
+          id="dropdown-item-button"
+          title="Number of Questions"
+          variant="info"
+          size="lg"
+        >
           <Dropdown.Item
             onClick={this.handleClick}
             as="button"
@@ -95,7 +98,12 @@ class QuizSetup extends Component {
             20
           </Dropdown.Item>
         </DropdownButton>
-        <DropdownButton id="dropdown-item-button" title="Difficulty">
+        <DropdownButton
+          id="dropdown-item-button"
+          title="Difficulty"
+          variant="info"
+          size="lg"
+        >
           <Dropdown.Item
             as="button"
             name="difficultyOfQuestions"
@@ -121,7 +129,12 @@ class QuizSetup extends Component {
             Hard
           </Dropdown.Item>
         </DropdownButton>
-        <DropdownButton id="dropdown-item-button" title="Answer Type">
+        <DropdownButton
+          id="dropdown-item-button"
+          title="Answer Type"
+          variant="info"
+          size="lg"
+        >
           <Dropdown.Item
             as="button"
             name="typeOfQuestions"
@@ -139,7 +152,9 @@ class QuizSetup extends Component {
             True/False
           </Dropdown.Item>
         </DropdownButton>
-        <button onClick={this.callTriviaAPI}>GO</button>
+        <Button onClick={this.callTriviaAPI} variant="info" size="lg">
+          GO
+        </Button>
       </div>
     );
   }

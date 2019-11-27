@@ -11,3 +11,63 @@ header {
 .tr_header_span {
   margin: auto;
 }
+
+.signuplogingrp {
+  display: block !important;
+  margin-left: 15px;
+  width: auto;
+  margin: auto;
+}
+.logoutgrp {
+  padding: 20px;
+  vertical-align: middle;
+}
+.signuplogingrp > button,
+.logoutgrpbutton {
+  margin-right: 15px;
+  background-color: #0067a5;
+  color: #fada5e;
+}
+
+form {
+  display: block !important;
+  max-width: 100% !important;
+}
+
+.quizbutton {
+  height: 2em;
+  font-size: 20px;
+  margin-right: 15px;
+}
+.textgreen {
+  color: #50c878;
+}
+
+.textblue {
+  color: #0067a5;
+}
+
+.textcenter {
+  text-align: center;
+  /* padding: 50px; */
+  background-color: #eae0c8;
+  width: auto;
+  margin: auto;
+  height: auto;
+}
+
+h6 {
+  display: inline-block;
+  padding-top: 20px;
+  font-weight: 800;
+  font-size: 40px;
+}
+
+.triviamain {
+  display: block;
+  text-align: center;
+  width: auto;
+  margin: auto;
+  height: auto;
+  margin-top: 20px;
+}

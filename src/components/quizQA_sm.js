@@ -9,6 +9,7 @@ import ButtonGroup from "react-bootstrap/ButtonGroup";
 import ToggleButton from "react-bootstrap/ToggleButton";
 
 import axios from "axios";
+import "../css/custom.css";
 
 class QuizQA extends Component {
   constructor(props) {
@@ -149,14 +150,16 @@ class QuizQA extends Component {
         ) : (
           <div>
             <div>
-              {"Current Score  "}
-              {this.state.qaScore}
+              <h4>Current Score {this.state.qaScore}</h4>
             </div>
 
-            {"In QUIZ QA "}
+            {/* {"In QUIZ QA "} */}
 
             <div>
-              <p> {this.state.qadata[this.state.qaIndex].question}</p>
+              <h5>
+                {" "}
+                {decodeURI(this.state.qadata[this.state.qaIndex].question)}
+              </h5>
 
               <ButtonGroup toggle className="mt-3">
                 {this.state.randomAnswers.map((answer, index) => {
@@ -164,6 +167,7 @@ class QuizQA extends Component {
                     <ToggleButton
                       type="radio"
                       name="selectedAnswer"
+                      className="quizbutton"
                       defaultChecked
                       value={this.state.randomAnswers[index]}
                       onChange={this.handleChangeAnswerChosen}
@@ -179,10 +183,17 @@ class QuizQA extends Component {
             {this.state.qaShowAnswer && (
               <div>
                 <div>
-                  {" "}
-                  {this.state.qadata[this.state.qaIndex].correct_answer}
+                  <h5 className="textgreen">
+                    Correct Answer:{" "}
+                    {this.state.qadata[this.state.qaIndex].correct_answer}
+                  </h5>
                 </div>
-                <Button onClick={this._handleChangeNextItem}>NEXT</Button>
+                <Button
+                  className="quizbutton"
+                  onClick={this._handleChangeNextItem}
+                >
+                  NEXT
+                </Button>
               </div>
             )}
           </div>

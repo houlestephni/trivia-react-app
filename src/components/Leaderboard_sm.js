@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import axios from "axios";
 import { DropdownButton } from "react-bootstrap";
 import { Dropdown } from "react-bootstrap";
+import "../css/custom.css";
 
 class Leaderboard extends Component {
   constructor() {
@@ -71,10 +72,11 @@ class Leaderboard extends Component {
 
   render() {
     return (
-      <div>
-        <h1>Leaderboard Values here</h1>
-        <p>{this.state.highScoringUser}</p>
-        <p>{this.state.highScore}</p>
+      <div className="textcenter">
+        <h6>
+          Leaderboard: User: {this.state.highScoringUser} High Score:{" "}
+          {this.state.highScore}
+        </h6>
       </div>
     );
   }
