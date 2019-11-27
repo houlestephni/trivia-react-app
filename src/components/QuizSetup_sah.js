@@ -152,7 +152,12 @@ class QuizSetup extends Component {
             True/False
           </Dropdown.Item>
         </DropdownButton>
-        <Button onClick={this.callTriviaAPI} variant="info" size="lg">
+        <Button
+          className="bkcoral"
+          onClick={this.callTriviaAPI}
+          variant="info"
+          size="lg"
+        >
           GO
         </Button>
       </div>

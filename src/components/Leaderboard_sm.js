@@ -72,11 +72,12 @@ class Leaderboard extends Component {
 
   render() {
     return (
-      <div className="textcenter">
-        <h6>
-          Leaderboard: User: {this.state.highScoringUser} High Score:{" "}
-          {this.state.highScore}
-        </h6>
+      <div className="textcenter textcoral">
+        <p>Leaderboard </p>
+        <p>
+          User: {this.state.highScoringUser} {"     "}High Score:{" "}
+          {this.state.highScore}%
+        </p>
       </div>
     );
   }

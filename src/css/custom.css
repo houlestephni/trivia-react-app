@@ -46,6 +46,13 @@ form {
 .textblue {
   color: #0067a5;
 }
+.textcoral {
+  color: #ff4040;
+}
+.bkcoral {
+  background-color: #ff4040;
+  border: none;
+}
 
 .textcenter {
   text-align: center;
@@ -54,6 +61,14 @@ form {
   width: auto;
   margin: auto;
   height: auto;
+  font-size: 20px;
+  font-weight: bolder !important;
+  padding: 0;
+  margin-bottom: 0 !important;
+  /* padding-top: 10px; */
+}
+.textcenter > p {
+  margin-bottom: 0;
 }
 
 h6 {
